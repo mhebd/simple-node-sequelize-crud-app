@@ -44,4 +44,53 @@ exports.findStudent = asyncHdl(async (req, res, next) => {
 	});
 });
 
-//
+// Update a student
+exports.updateStudent = asyncHdl(async (req, res, next) => {
+	const { id } = req.params;
+
+	const hasStudent = await Student.findOne({
+		where: { id },
+	});
+
+	if (!hasStudent) {
+		return next(new errMsg(`Student on id ${id} is not found.`, 404));
+	}
+
+	const { name, age, course } = req.body;
+
+	const student = await Student.update(
+		{ name, age, course },
+		{
+			where: { id },
+		}
+	);
+
+	res.status(200).json({
+		success: true,
+		message: 'Student Updated Successful',
+		student,
+	});
+});
+
+// Delete a student
+exports.deleteStudent = asyncHdl(async (req, res, next) => {
+	const { id } = req.params;
+
+	const hasStudent = await Student.findOne({
+		where: { id },
+	});
+
+	if (!hasStudent) {
+		return next(new errMsg(`Student on id ${id} is not found.`, 404));
+	}
+
+	const student = await Student.destroy({
+		where: { id },
+	});
+
+	res.status(200).json({
+		success: true,
+		message: 'Student deleted successful.',
+		student,
+	});
+});

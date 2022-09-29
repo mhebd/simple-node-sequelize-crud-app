@@ -44,4 +44,53 @@ exports.findTeacher = asyncHdl(async (req, res, next) => {
 	});
 });
 
-//
+// Update a teacher
+exports.updateTeacher = asyncHdl(async (req, res, next) => {
+	const { id } = req.params;
+
+	const hasTeacher = await Teacher.findOne({
+		where: { id },
+	});
+
+	if (!hasTeacher) {
+		return next(new errMsg(`Teacher on id ${id} is not found.`, 404));
+	}
+
+	const { name, age, course } = req.body;
+
+	const teacher = await Teacher.update(
+		{ name, age, course },
+		{
+			where: { id },
+		}
+	);
+
+	res.status(200).json({
+		success: true,
+		message: 'Teacher Updated Successful',
+		teacher,
+	});
+});
+
+// Delete a teacher
+exports.deleteTeacher = asyncHdl(async (req, res, next) => {
+	const { id } = req.params;
+
+	const hasTeacher = await Teacher.findOne({
+		where: { id },
+	});
+
+	if (!hasTeacher) {
+		return next(new errMsg(`Teacher on id ${id} is not found.`, 404));
+	}
+
+	const teacher = await Teacher.destroy({
+		where: { id },
+	});
+
+	res.status(200).json({
+		success: true,
+		message: 'Teacher deleted successful.',
+		teacher,
+	});
+});
