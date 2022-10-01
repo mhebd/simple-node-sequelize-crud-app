@@ -1,7 +1,10 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const Course = require('../model/Course');
-const Student = require('../model/Student');
-const Teacher = require('../model/Teacher');
+const Cart = require('../model/Cart');
+const CartItem = require('../model/CartItem');
+const Contact = require('../model/Contact');
+const Order = require('../model/Order');
+const Product = require('../model/Product');
+const User = require('../model/User');
 
 // Create sequelize instance
 const sequelize = new Sequelize(
@@ -28,10 +31,50 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 // Add model
-db.Student = Student(sequelize, DataTypes);
-db.Teacher = Teacher(sequelize, DataTypes);
-db.Course = Course(sequelize, DataTypes);
+db.User = User(sequelize, DataTypes);
+db.Contact = Contact(sequelize, DataTypes);
+db.Product = Product(sequelize, DataTypes);
+db.CartItem = CartItem(sequelize, DataTypes);
+db.Cart = Cart(sequelize, DataTypes);
+db.Order = Order(sequelize, DataTypes);
 
+// Create ont-to-one relation between USER and CONTACT table
+db.User.hasOne(db.Contact, {
+	foreignKey: 'userId',
+});
+db.Contact.belongsTo(db.User, {
+	foreignKey: 'userId',
+});
+
+// Create one-to-one relation between USER and CART table
+db.User.hasOne(db.Cart, {
+	foreignKey: 'userId',
+});
+db.Cart.belongsTo(db.User, {
+	foreignKey: 'userId',
+});
+
+// Create one-to-many relation between CART and CARTITEM table
+db.Cart.hasMany(db.CartItem);
+db.CartItem.belongsTo(db.Cart);
+
+// Create one-to-one relation between PRODUCT and CARTITEM
+db.Product.hasOne(db.CartItem, {
+	foreignKey: 'productId',
+});
+db.CartItem.belongsTo(db.Product, {
+	foreignKey: 'productId',
+});
+
+// Create one-to-many relation between ORDER and CARTITEM
+db.Order.hasMany(db.CartItem);
+db.CartItem.belongsTo(db.Order);
+
+// Create one-to-many relation between USER and ORDER
+db.User.hasMany(db.Order);
+db.Order.belongsTo(db.User);
+
+// Create all table or update
 db.sequelize.sync({ force: false });
 
 // Export database

@@ -7,9 +7,8 @@ const error = require('./middleware/error');
 require('dotenv').config({ path: './config/.env' });
 //============================================//
 // Import route path
-const studentRoute = require('./route/student');
-const teacherRoute = require('./route/teacher');
-const courseRoute = require('./route/course');
+const userRouter = require('./route/user');
+const contactRouter = require('./route/contact');
 
 // Create app instance
 const app = express();
@@ -23,9 +22,8 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '/')));
 
 // All route
-app.use('/api/v1/student', studentRoute);
-app.use('/api/v1/teacher', teacherRoute);
-app.use('/api/v1/course', courseRoute);
+app.use('/api/v1/user', userRouter);
+app.use('/api/v1/contact', contactRouter);
 
 // Test route
 app.get('/', (req, res) => {
