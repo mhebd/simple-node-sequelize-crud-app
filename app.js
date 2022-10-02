@@ -9,6 +9,9 @@ require('dotenv').config({ path: './config/.env' });
 // Import route path
 const userRouter = require('./route/user');
 const contactRouter = require('./route/contact');
+const productRouter = require('./route/product');
+const cartItemRouter = require('./route/cartItem');
+const orderRouter = require('./route/order');
 
 // Create app instance
 const app = express();
@@ -24,6 +27,9 @@ app.use(express.static(path.join(__dirname, '/')));
 // All route
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/contact', contactRouter);
+app.use('/api/v1/product', productRouter);
+app.use('/api/v1/cartitem', cartItemRouter);
+app.use('/api/v1/order', orderRouter);
 
 // Test route
 app.get('/', (req, res) => {

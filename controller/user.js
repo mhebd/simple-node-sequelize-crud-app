@@ -1,6 +1,6 @@
 const { asyncHdl, errMsg, Result } = require('../utility');
 const bcrypt = require('bcryptjs');
-const { User, Contact, Cart } = require('../db');
+const { User, Contact, Cart, CartItem, Product } = require('../db');
 const jwt = require('jsonwebtoken');
 
 // Register a new User
@@ -123,7 +123,14 @@ exports.findOneUser = asyncHdl(async (req, res, next) => {
 		where: {
 			id,
 		},
-		include: ['Contact', 'Cart'],
+		include: [
+			{
+				model: Contact,
+			},
+			{
+				model: Cart,
+			},
+		],
 	});
 
 	res.status(200).json(new Result(true, '', { user: user[0] }));
