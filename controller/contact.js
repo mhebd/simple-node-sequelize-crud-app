@@ -6,7 +6,7 @@ exports.updateContact = asyncHdl(async (req, res, next) => {
 	const { phone, city, zip, country } = req.body;
 
 	// Update contact
-	const contact = await Contact.update(
+	await Contact.update(
 		{
 			phone,
 			city,
@@ -18,9 +18,7 @@ exports.updateContact = asyncHdl(async (req, res, next) => {
 		}
 	);
 
-	res
-		.status(201)
-		.json(new Result(true, 'Contact created successful.', { contact }));
+	res.status(201).json(new Result(true, 'Contact created successful.', null));
 });
 
 //

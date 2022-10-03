@@ -11,8 +11,10 @@ exports.cartDetails = asyncHdl(async (req, res, next) => {
 		},
 		include: {
 			model: CartItem,
+			attributes: ['id', 'quantity'],
 			include: {
 				model: Product,
+				attributes: ['id', 'name', 'price'],
 			},
 		},
 	});

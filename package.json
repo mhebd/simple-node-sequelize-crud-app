@@ -1,7 +1,7 @@
 {
   "name": "simple-node-sequelize-crud-app",
   "version": "1.0.0",
-  "description": "This is a simple node-express crud application with MySQL (sequelize) Database.",
+  "description": "This is a simple node-express crud (e-commerce) application with MySQL (sequelize) Database.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

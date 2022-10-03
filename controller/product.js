@@ -24,7 +24,14 @@ exports.createProduct = asyncHdl(async (req, res, next) => {
 
 // Find all products
 exports.findProducts = asyncHdl(async (req, res, next) => {
-	const products = await Product.findAll({});
+	const limit = req.query.limit * 1 || 20;
+	const page = req.query.page * 1 || 1;
+	const offset = limit * (page - 1);
+
+	const products = await Product.findAll({
+		limit,
+		offset,
+	});
 
 	res.status(200).json(new Result(true, '', { products }));
 });
@@ -33,9 +40,7 @@ exports.findProducts = asyncHdl(async (req, res, next) => {
 exports.findOneProduct = asyncHdl(async (req, res, next) => {
 	const { id } = req.params;
 
-	const product = await Product.findOne({
-		where: { id },
-	});
+	const product = await Product.findByPk(id);
 
 	res.status(200).json(new Result(true, '', { product }));
 });
@@ -60,7 +65,7 @@ exports.updateProduct = asyncHdl(async (req, res, next) => {
 	if (price) updatedField.price = price;
 	if (description) updatedField.description = description;
 
-	const updated = await Product.update(updatedField, {
+	await Product.update(updatedField, {
 		where: { id },
 	});
 
@@ -79,7 +84,7 @@ exports.deleteProduct = asyncHdl(async (req, res, next) => {
 		return next(new errMsg('Product did not exists.', 404));
 	}
 
-	const deleted = await Product.destroy({
+	await Product.destroy({
 		where: { id },
 	});
 

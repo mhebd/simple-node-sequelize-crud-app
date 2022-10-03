@@ -15,6 +15,12 @@ const sequelize = new Sequelize(
 		host: process.env.DB_HOST,
 		logging: false,
 		dialect: 'mysql',
+		pool: {
+			max: 5,
+			min: 0,
+			acquire: 30000,
+			idle: 10000,
+		},
 	}
 );
 
@@ -74,7 +80,7 @@ db.CartItem.belongsTo(db.Order);
 db.User.hasMany(db.Order);
 db.Order.belongsTo(db.User);
 
-// Create all table or update
+// Create or update all table
 db.sequelize.sync({ force: false });
 
 // Export database

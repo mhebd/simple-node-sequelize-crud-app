@@ -110,7 +110,17 @@ exports.loginUser = asyncHdl(async (req, res, next) => {
 
 // Find all user
 exports.findUsers = asyncHdl(async (req, res, next) => {
-	const users = await User.findAll({});
+	const limit = req.query.limit * 1 || 20;
+	const page = req.query.page * 1 || 1;
+	const offset = limit * (page - 1);
+
+	const users = await User.findAll({
+		attributes: {
+			exclude: ['password'],
+		},
+		limit,
+		offset,
+	});
 
 	res.status(200).json(new Result(true, '', { users }));
 });
@@ -119,21 +129,16 @@ exports.findUsers = asyncHdl(async (req, res, next) => {
 exports.findOneUser = asyncHdl(async (req, res, next) => {
 	const { id } = req.params;
 
-	const user = await User.findAll({
-		where: {
-			id,
-		},
+	const user = await User.findByPk(id, {
+		attributes: { exclude: ['password', 'createdAt'] },
 		include: [
 			{
 				model: Contact,
 			},
-			{
-				model: Cart,
-			},
 		],
 	});
 
-	res.status(200).json(new Result(true, '', { user: user[0] }));
+	res.status(200).json(new Result(true, '', { user: user }));
 });
 
 // Update a User
@@ -191,5 +196,5 @@ exports.deleteUser = asyncHdl(async (req, res, next) => {
 	}
 
 	// Send response
-	res.status(200).json(new Result(true, 'User Deleted successful.', { user }));
+	res.status(200).json(new Result(true, 'User Deleted successful.', null));
 });

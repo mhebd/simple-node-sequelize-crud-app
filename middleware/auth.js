@@ -21,8 +21,8 @@ exports.private = async (req, res, next) => {
 	next();
 };
 
-exports.limited = (req, res, next) => {
-	if (req.user.type === 'admin') {
+exports.limited = (type) => (req, res, next) => {
+	if (req.user.type === type) {
 		next();
 	} else {
 		return next(new errMsg('You have no permission to access this page.', 401));

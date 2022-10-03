@@ -32,24 +32,20 @@ exports.updateCartItem = asyncHdl(async (req, res, next) => {
 
 	if (quantity) updatedField.quantity = quantity;
 
-	const cartItem = await CartItem.update(updatedField, {
+	await CartItem.update(updatedField, {
 		where: { id },
 	});
 
-	res
-		.status(201)
-		.json(new Result(true, 'CartItem updated successful.', { cartItem }));
+	res.status(201).json(new Result(true, 'CartItem updated successful.', null));
 });
 
 // Delete a cart item
 exports.deleteCartItem = asyncHdl(async (req, res, next) => {
 	const { id } = req.params;
 
-	const cartItem = await CartItem.destroy({
+	await CartItem.destroy({
 		where: { id },
 	});
 
-	res
-		.status(201)
-		.json(new Result(true, 'CartItem deleted successful.', { cartItem }));
+	res.status(201).json(new Result(true, 'CartItem deleted successful.', null));
 });
